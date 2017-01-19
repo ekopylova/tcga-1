@@ -19,10 +19,11 @@ def load_kraken_mpa_report(kraken_mpa_report_fp,
                            taxa_levels,
                            read_per_taxa):
     """Absolute abundance of number of reads matching a defined taxa level.
+
     Parameters
     ----------
-    kraken_mpa_report_fp: str
-        filepath to output of "kraken mpa report"
+    kraken_mpa_report_fp: tuple
+        filepath(s) to output of "kraken mpa report"
     taxa_levels: list
         list of two elements that includes the taxonomic rank at which
         to generate summary and rank below to split by
@@ -36,8 +37,8 @@ def load_kraken_mpa_report(kraken_mpa_report_fp,
     """
     taxonomic_abundances= []
     for report_fp in kraken_mpa_report_fp:
-        with open(report_fp) as report_fp:
-            for line in report_fp:
+        with open(report_fp) as report_f:
+            for line in report_f:
                 label, taxonomy = line.strip().split('\t')
                 if taxa_levels[0] in taxonomy:
                     # keep taxonomy string up to specified level
@@ -128,8 +129,8 @@ def main(kraken_mpa_report_fp,
                        "4": "|f__", "3": "|o__", "2": "|c__",
                        "1": "|p__", "0": "d__"}
 
-    taxa_levels_str=taxa_levels[taxonomic_rank]
-    taxa_levels_idx_int=taxa_levels_idx[taxa_levels_str]
+    taxa_levels_str = taxa_levels[taxonomic_rank]
+    taxa_levels_idx_int = taxa_levels_idx[taxa_levels_str]
 
     if taxa_levels_idx_int < 6:
         split_on_level = taxa_levels_idx[str(taxa_levels_idx_int + 1)]
